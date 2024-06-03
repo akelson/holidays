@@ -44,6 +44,8 @@ class KelsonHomeHolidays(US):
                 else self._add_holiday_mar_4(name),
                 rule=holidays.SUN_TO_NEXT_MON,
             )
+
+        self._add_holiday_mar_14("Pi Day")
         
         jan_1 = date(year=year, month=1, day=1)
 
