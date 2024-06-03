@@ -1,6 +1,9 @@
 from datetime import date
 import holidays
 from holidays.countries import US
+import ephem
+from icalendar import Calendar, Event
+import argparse
 
 class KelsonHomeHolidays(US):
     def _populate(self, year):
@@ -24,6 +27,7 @@ class KelsonHomeHolidays(US):
         self._add_holiday_dec_7("Pearl Harbor Day")
         self._add_world_war_two_victory_day("Victory Day")
 
+        # Roe v. Wade was overturned on June 24, 2022
         if self._year >= 2022:
             self._add_holiday_jun_24("National Celebrate Life Day")
 
@@ -40,8 +44,30 @@ class KelsonHomeHolidays(US):
                 else self._add_holiday_mar_4(name),
                 rule=holidays.SUN_TO_NEXT_MON,
             )
+        
+        jan_1 = date(year=year, month=1, day=1)
 
-kelson_holidays = KelsonHomeHolidays(years=2024, categories=(holidays.PUBLIC, holidays.UNOFFICIAL)) 
+        self._add_holiday("Spring Equinox", ephem.next_spring_equinox(jan_1).datetime())
+        self._add_holiday("Summer Solstice", ephem.next_summer_solstice(jan_1).datetime())
+        self._add_holiday("Fall Equinox", ephem.next_fall_equinox(jan_1).datetime())
+        self._add_holiday("Winter Solstice", ephem.next_winter_solstice(jan_1).datetime())
 
-for dt, name in sorted(kelson_holidays.items()):
-    print(dt, name)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Generate a custom Holiday Calendar iCal file.")
+    parser.add_argument("year", type=int)
+    args = parser.parse_args()
+
+    kelson_holidays = KelsonHomeHolidays(years=args.year, categories=(holidays.PUBLIC, holidays.UNOFFICIAL)) 
+
+    cal = Calendar()
+
+    for dt, names in sorted(kelson_holidays.items()):
+        for name in names.split("; "):
+            event = Event()
+            event.add('summary', name)
+            event.add('dtstart', dt)
+            cal.add_component(event)
+
+    with open("holidays.ics", "wb") as f:
+        f.write(cal.to_ical())
