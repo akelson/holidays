@@ -32,7 +32,7 @@ class KelsonHomeHolidays(US):
             self._add_holiday_jun_24("National Celebrate Life Day")
 
         # Lincoln's Birthday
-        if self._year >= 2010:
+        if self._year >= 1809:
             self._add_holiday_1_day_past_4th_thu_of_nov("Lincoln's Birthday")
 
         # Inauguration Day
