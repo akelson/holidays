@@ -13,7 +13,6 @@ class KelsonHomeHolidays(US):
         self._add_good_friday("Good Friday")
         self._add_easter_sunday("Resurrection Sunday")
 
-        # Christmas and New Year's Eve
         self._add_christmas_eve_holiday()
         self._add_new_years_eve("New Year's Eve")
 
@@ -31,9 +30,7 @@ class KelsonHomeHolidays(US):
         if self._year >= 2022:
             self._add_holiday_jun_24("National Celebrate Life Day")
 
-        # Lincoln's Birthday
-        if self._year >= 1809:
-            self._add_holiday_1_day_past_4th_thu_of_nov("Lincoln's Birthday")
+        self._add_holiday_1_day_past_4th_thu_of_nov("Lincoln's Birthday")
 
         # Inauguration Day
         if self._year >= 1789 and (self._year - 1789) % 4 == 0:
@@ -42,18 +39,16 @@ class KelsonHomeHolidays(US):
                 self._add_holiday_jan_20(name)
                 if self._year >= 1937
                 else self._add_holiday_mar_4(name),
-                rule=holidays.SUN_TO_NEXT_MON,
+                rule=holidays.observed_holiday_base.SUN_TO_NEXT_MON,
             )
 
         self._add_holiday_mar_14("Pi Day")
         
         jan_1 = date(year=year, month=1, day=1)
-
         self._add_holiday("Spring Equinox", ephem.next_spring_equinox(jan_1).datetime())
         self._add_holiday("Summer Solstice", ephem.next_summer_solstice(jan_1).datetime())
         self._add_holiday("Fall Equinox", ephem.next_fall_equinox(jan_1).datetime())
         self._add_holiday("Winter Solstice", ephem.next_winter_solstice(jan_1).datetime())
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate a custom Holiday Calendar iCal file.")
