@@ -66,5 +66,5 @@ if __name__ == "__main__":
             event.add('dtstart', dt)
             cal.add_component(event)
 
-    with open("holidays.ics", "wb") as f:
+    with open(f"holidays_{dt.year}.ics", "wb") as f:
         f.write(cal.to_ical())
